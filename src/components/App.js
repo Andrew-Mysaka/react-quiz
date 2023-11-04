@@ -33,12 +33,15 @@ function reducer(state, action) {
             return {...state, answer: action.payload,
                 points: action.payload === question.correctOption ? state.points + question.points : state.points};
         case 'nextQuestion':
-            return {...state, index: state.index + 1, answer: null,
+            return {...state, index: state.index + 1, answer: null};
+        case 'finish':
+            return {...state, status: 'finished',
                 highscore: state.points > state.highscore
                     ? state.points
-                    : state.highscore};
-        case 'finish':
-            return {...state, status: 'finished'};
+                    : state.highscore
+            };
+        case 'restart':
+            return {...initialState, questions: state.questions, status: 'ready'};
         default:
             throw new Error("Actions unknown");
     }
@@ -92,6 +95,7 @@ function App() {
                     points={points}
                     maxPossiblePoints={maxPossiblePoints}
                     highscore={highscore}
+                    dispatch={dispatch}
                 />}
             </Main>
         </div>
